@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>FORMULIR DETEKSI DINI (COVID-19)</h2>
+
+@using (Html.BeginForm("Create", "Covid", FormMethod.Post, new { id = "Id_Form_Create" }))
+{
+
+    <div class="container-fluid">
+        <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Your answer" required>
+        </div>
+        <div class="form-group">
+            <label for="nama">Nama *</label>
+            <input type="text" class="form-control" name="nama" id="nama" placeholder="Your answer" required>
+        </div>
+        <div class="form-group">
+            <label for="npm">NPM/NIS *</label>
+            <input type="text" class="form-control" name="npm" id="npm" placeholder="Your answer" required>
+        </div>
+        <div class="form-group">
+            <label for="umur">Umur *</label>
+            <input type="text" class="form-control" name="umur" id="umur" placeholder="Your answer" required>
+        </div>
+        <div class="form-group">
+            <label for="jenis_kelamin">Jenis Kelamin *</label>
+            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required>
+                <option value = false>Perempuan</option>
+                <option value = true>Laki-Laki</option>
+            </select>
+            @*<input type="text" class="form-control" id="jenis_kelamin" placeholder="Your answer">*@
+        </div>
+        <div class="form-group">
+            <label for="telepon">Telp *</label>
+            <input type="text" class="form-control" name="telepon" id="telepon" placeholder="Your answer" required>
+        </div>
+        <div class="form-group">
+            <label for="alamat_saat_ini">Alamat Saat Ini *</label>
+            <input type="text" class="form-control" name="alamat_saat_ini" id="alamat_saat_ini" placeholder="Your answer" required>
+        </div>
+        <div class="form-group">
+            <label for="alamat_asal">Alamat Asal</label>
+            <input type="text" class="form-control" name="alamat_asal" id="alamat_asal" placeholder="Your answer" required>
+        </div>
+        <div class="form-group">
+            <label for="posisi_saat_ini">Saat Ini Saya Berada Di *</label>
+            <input type="text" class="form-control" name="posisi_saat_ini" id="posisi_saat_ini" placeholder="Your answer" required>
+
+            @*<div class="form-check">
+                    <input class="form-check-input" type="radio" name="posisi_saat_ini" id="posisi_saat_ini" value="option1">
+                    <label class="form-check-label" for="exampleRadios1">
+                        Karawang
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="posisi_saat_ini" id="posisi_saat_ini" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        Other
+                    </label>
+                </div>*@
+        </div>
+
+        <button id="btn-Add" type="submit" class="btn btn-danger">Kirim</button>
+</div>
+}
+
+
+<script src="~/Scripts/jquery.validate.js"></script>
+
+<script>
+
+    $(function () {
+        $("#Id_Form_Create").validate({
+            errorClass: 'errors',
+            rules: {
+                email: {
+                    required: true,
+                },
+                nama: {
+                    required: true,
+                },
+                npm: {
+                    required: true,
+                    number: true,
+                    maxlength: 8,
+                },
+                umur: {
+                    required: true,
+                },
+                jenis_kelamin: {
+                    required: true,                                  
+                },
+                telepon: {
+                    required: true,
+                    number: true,
+                    maxlength: 13,
+                },
+                alamat_saat_ini: {
+                    required: true,
+                },
+                alamat_asal: {
+                    required: true,
+                },
+                posisi_saat_ini: {
+                    required: true,
+                }
+            },
+            messages: {
+                email: {
+                    required: "Please input EMAIL",
+                },
+                nama: {
+                    required: "Please input NAME",
+                },
+                npm: {
+                    required: "Please input NPM/NIS",
+                    number: "Must Be Number",
+                    maxlength: "Max Length 8"
+
+                },
+                umur: {
+                    required: "Please input Umur Anda",
+                },
+                jenis_kelamin: {
+                    required: "Please Input Alamat Saat Ini",
+
+                },
+                telepon: {
+                    required: "Please Input Telepon",
+                    maxlength: "Max Length 13",
+                    number: "Must Be Number",
+                    
+                },
+
+                alamat_saat_ini: {
+                    required: "Please Input Alamat Saat Ini",
+                    
+                },
+                alamat_asal: {
+                    required: "Please Input Alamat Asal",
+
+                },
+                posisi_saat_ini: {
+                    required: "Please Input Posisi Saat Ini",
+
+                }
+            },
+
+            submitHandler: function (form) {
+                var dataForm = $(form).serialize();
+                debugger;
+                $.ajax({
+                    url: '/Covid/Create',
+                    data: dataForm,
+                    method: 'post',
+                    success: function (response) {
+                        debugger;
+                        if (response.message == "Berhasil") {
+                            window.location.reload();
+                        }
+                        else if (response.message == "Gagal") {
+                            alert(response.message);
+                            window.location.reload();
+                        }
+                        else {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+        });
+        return false;
+    });
+
+
+</script>

@@ -1,0 +1,211 @@
+﻿@model List<ViewModel.Covid.VMCovid>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Data</h2>
+
+<input id="btn-Add" class="btn btn-info" style="background-color:#191970" type="button" value="Input">
+
+
+<div class="table-responsive text-center">
+    <table class="table table-striped text-center table-bordered">
+        <thead>
+            <tr>
+                <td>
+                    Email
+                </td>
+                <td>
+                    Nama
+                </td>
+                <td>
+                    NPM
+                </td>
+                <td>
+                    Umur
+                </td>
+                <td>
+                    Jenis Kelamin
+                </td>
+                <td>
+                    Telp
+                </td>
+                <td>
+                    Alamat Saat Ini
+                </td>
+                <td>
+                    Alamat Asal
+                </td>
+                <td>
+                    Keberadaan Saat Ini
+                </td>
+                <td>
+                    Action
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+
+                    <td>
+                        @a.email
+                    </td>
+                    <td>
+                        @a.nama
+                    </td>
+                    <td>
+                        @a.npm
+                    </td>
+                    <td>
+                        @a.umur
+                    </td>
+                    <td>
+                        @if (a.jenis_kelamin == false)
+                        {
+                            <span>Perempuan</span>
+                        }
+                        else
+                        {
+                            <span>Laki-Laki</span>
+                        }
+
+                    </td>
+                    <td>
+                        @a.telepon
+                    </td>
+                    <td>
+                        @a.alamat_saat_ini
+                    </td>
+                    <td>
+                        @a.alamat_asal
+                    </td>
+                    <td>
+                        @a.posisi_saat_ini
+                    </td>
+
+                    <td>
+                        <button class="btn btn-warning btn cls-edit" onclick="Edit(@a.id)">Edit</button>
+                        @*<button class="btn btn-success cls-delete" onclick="Detail123(@a.id)">Detail</button>*@
+                        <button class="btn btn-danger cls-delete" onclick="Delete123(@a.id)">Delete</button>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="id-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#D33E1E">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="id-body-modal">
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="id-modals" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#191970">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="id-body-modals">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header" id="head-delete" style="background-color:#191970">
+                <h5 class="modal-title" id="title-delete">Yakin Hapus ?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="id-body-delete">
+                ...
+            </div>
+            <div class="modal-footer">
+                <div style="float:right;">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        <span aria-hidden="true">Batal</span>
+                    </button>
+                    <button id="id-btn-submit" type="submit" class="btn btn-primary">Ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+     $("#btn-Add").click(function () {
+        $.ajax({
+            url: '@Url.Action("Create","Covid")',
+            method: 'get',
+            success: function (hasil) {
+                $("#id-body-modals").html(hasil);
+                $("#id-modals").modal("show");
+            }
+        });
+     });
+
+    function Delete123(id) {
+        console.log(id)
+        $("#id-body-delete").empty();
+        //("#title-delete").append("Hapus");
+        $("#id-body-delete").append("Anda yakin ingin menghapus Data ?");
+        $("#modal-delete").modal("show");
+
+        $("#id-btn-submit").click(function () {
+            console.log("test")
+            $.ajax({
+                url: '@Url.Action("Delete", "Covid")',
+                method: 'post',
+                data: {
+                    Covid : id
+                },
+                success: function (hasil) {
+                    window.location.href = '@Url.Action("Index","Covid")';
+                }
+            });
+        })
+    }
+
+
+    function Edit(Covid) {
+        $.ajax({
+            url: '/Covid/Edit',
+            method: 'get',
+            data:
+            {
+                Covid: Covid
+            },
+            success: function (hasil) {
+                debugger;
+                $("#id-body-modals").html(hasil);
+                $("#id-modals").modal("show");
+            }
+        });
+    }
+
+</script>
